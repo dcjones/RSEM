@@ -411,7 +411,9 @@ bool SingleModel::simulate(READ_INT_TYPE rid, SingleRead& read, int& sid, bool d
 	std::string readseq;
 	std::ostringstream strout;
 
-	sid = sampler->sample(theta_cdf, M + 1);
+  if (!deterministic) {
+    sid = sampler->sample(theta_cdf, M + 1);
+  }
 
 	if (sid == 0) {
 		dir = pos = 0;

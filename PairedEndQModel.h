@@ -385,7 +385,9 @@ bool PairedEndQModel::simulate(READ_INT_TYPE rid, PairedEndReadQ& read, int& sid
 	std::string qual1, qual2, readseq1, readseq2;
 	std::ostringstream strout;
 
-	sid = sampler->sample(theta_cdf, M + 1);
+	if (!deterministic) {
+    sid = sampler->sample(theta_cdf, M + 1);
+	}
 
 	if (sid == 0) {
 		dir = pos = insertL = 0;
