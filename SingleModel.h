@@ -232,7 +232,7 @@ public:
 	const LenDist& getGLD() { return *gld; }
 
 	void startSimulation(simul*, const std::vector<double>&);
-	bool simulate(READ_INT_TYPE, SingleRead&, int&);
+	bool simulate(READ_INT_TYPE, SingleRead&, int&, bool deterministic = false);
 	void finishSimulation();
 
 	const double* getMW() { 
@@ -405,7 +405,7 @@ void SingleModel::startSimulation(simul* sampler, const std::vector<double>& the
 	npro->startSimulation();
 }
 
-bool SingleModel::simulate(READ_INT_TYPE rid, SingleRead& read, int& sid) {
+bool SingleModel::simulate(READ_INT_TYPE rid, SingleRead& read, int& sid, bool deterministic) {
 	int dir, pos, readLen, fragLen;
 	std::string name;
 	std::string readseq;

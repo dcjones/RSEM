@@ -240,7 +240,7 @@ public:
 	const LenDist& getGLD() { return *gld; }
 
 	void startSimulation(simul*, const std::vector<double>&);
-	bool simulate(READ_INT_TYPE, SingleReadQ&, int&);
+	bool simulate(READ_INT_TYPE, SingleReadQ&, int&, bool deterministic = false);
 	void finishSimulation();
 
 	//Use it after function 'read' or 'estimateFromReads'
@@ -407,7 +407,6 @@ void SingleQModel::write(const char* outF) {
 }
 
 void SingleQModel::startSimulation(simul* sampler, const std::vector<double>& theta) {
-  std::cout << "I'm in singleQ " << std::endl;
 	this->sampler = sampler;
 
 	theta_cdf = new double[M + 1];
@@ -422,13 +421,15 @@ void SingleQModel::startSimulation(simul* sampler, const std::vector<double>& th
 	nqpro->startSimulation();
 }
 
-bool SingleQModel::simulate(READ_INT_TYPE rid, SingleReadQ& read, int& sid) {
+bool SingleQModel::simulate(READ_INT_TYPE rid, SingleReadQ& read, int& sid, bool deterministic) {
 	int dir, pos, readLen, fragLen;
 	std::string name;
 	std::string qual, readseq;
 	std::ostringstream strout;
 
-	sid = sampler->sample(theta_cdf, M + 1);
+	if (!deterministic) {
+    sid = sampler->sample(theta_cdf, M + 1);
+	}
 
 	if (sid == 0) {
 		dir = pos = 0;

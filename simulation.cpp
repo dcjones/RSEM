@@ -163,7 +163,7 @@ void simulate(char* modelF, char* resultsF, bool deterministic = false) {
 	model.startSimulation(sampler, theta);
 
 	for (READ_INT_TYPE i = 0; i < N; i++) {
-		while (!model.simulate(i, read, sid)) { ++resimulation_count; }
+		while (!model.simulate(i, read, sid, deterministic)) { ++resimulation_count; }
 		read.write(n_os, os);
 		++counts[sid];
 		if ((i + 1) % 1000000 == 0 && verbose) cout<<"GEN "<< i + 1<< endl;

@@ -195,7 +195,7 @@ public:
 	const LenDist& getGLD() { return *gld; }
 
 	void startSimulation(simul*, const std::vector<double>&);
-	bool simulate(READ_INT_TYPE, PairedEndRead&, int&);
+	bool simulate(READ_INT_TYPE, PairedEndRead&, int&, bool deterministic = false);
 	void finishSimulation();
 
 	//Use it after function 'read' or 'estimateFromReads'
@@ -364,7 +364,7 @@ void PairedEndModel::startSimulation(simul* sampler, const std::vector<double>& 
 	npro->startSimulation();
 }
 
-bool PairedEndModel::simulate(READ_INT_TYPE rid, PairedEndRead& read, int& sid) {
+bool PairedEndModel::simulate(READ_INT_TYPE rid, PairedEndRead& read, int& sid, bool deterministic) {
 	int dir, pos;
 	int insertL, mateL1, mateL2;
 	std::string name;
