@@ -124,7 +124,10 @@ void simulate(char* modelF, char* resultsF, bool deterministic = false) {
 
 	  // I think M is the number of targets.. -HP
     // we care about the counts and not the TPM
-	  sim_counts.reserve(M);
+	  sim_counts.reserve(M + 1);
+
+	  // the first one is the 'noise'
+	  sim_counts.push_back(0);
 
     // I think for allele specific expression might need to change this...
     // -HP
@@ -162,12 +165,35 @@ void simulate(char* modelF, char* resultsF, bool deterministic = false) {
 	//simulating...
 	model.startSimulation(sampler, theta);
 
-	for (READ_INT_TYPE i = 0; i < N; i++) {
-		while (!model.simulate(i, read, sid, deterministic)) { ++resimulation_count; }
-		read.write(n_os, os);
-		++counts[sid];
-		if ((i + 1) % 1000000 == 0 && verbose) cout<<"GEN "<< i + 1<< endl;
-	}
+  if (!deterministic) {
+    for (READ_INT_TYPE i = 0; i < N; i++) {
+      while (!model.simulate(i, read, sid, false)) { ++resimulation_count; }
+      read.write(n_os, os);
+      ++counts[sid];
+      if ((i + 1) % 1000000 == 0 && verbose) cout<<"GEN "<< i + 1<< endl;
+    }
+  } else {
+    // iterate over targets
+    READ_INT_TYPE i = 0;
+    for (int targ = 1; targ <= M; ++targ) {
+      sid = targ;
+      // simulate sim_counts[targ] number of reads from each target
+      while (sim_counts[targ]) {
+        while (!model.simulate(i, read, sid, true)) {
+          ++resimulation_count;
+        }
+        read.write(n_os, os);
+        ++counts[sid];
+
+        if ((i + 1) % 1000000 == 0 && verbose) {
+          cout<< "GEN " << i + 1 << endl;
+        }
+
+        ++i;
+        --sim_counts[targ];
+      }
+    }
+  }
 	model.finishSimulation();
 
 	cout<< "Total number of resimulation is "<< resimulation_count<< endl;
