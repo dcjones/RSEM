@@ -407,6 +407,7 @@ void SingleQModel::write(const char* outF) {
 }
 
 void SingleQModel::startSimulation(simul* sampler, const std::vector<double>& theta) {
+  std::cout << "I'm in singleQ " << std::endl;
 	this->sampler = sampler;
 
 	theta_cdf = new double[M + 1];
