@@ -222,7 +222,8 @@ int main(int argc, char* argv[]) {
 		printf("output_name: Prefix for all output files.\n");
 		printf("--seed seed: Set seed for the random number generator used in simulation. The seed should be a 32-bit unsigned integer.\n");
 		printf("-q: Set it will stop outputting intermediate information.\n\n");
-		printf("--deterministic: Will simulate deterministically the number of counts for each transcript.\n\n");
+		printf("--deterministic: Will simulate deterministically the number of counts for each transcript.\n");
+		printf("\tNOTE: --deterministic outputs reads based on the order of the transcripts in the FASTA. This is problematic for quantification tools using streaming algorithms (eXpress, Salmon). The reads should be shuffled before they are input into those programs.");
 		printf("Outputs:\n\n");
 		printf("output_name.sim.isoforms.results, output_name.sim.genes.results: Expression levels estimated by counting where each simulated read comes from.\n");
 		printf("output_name.sim.alleles.results: Allele-specific expression levels estimated by counting where each simulated read comes from.\n\n");
