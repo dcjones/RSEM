@@ -200,7 +200,7 @@ public:
 	const LenDist& getGLD() { return *gld; }
 
 	void startSimulation(simul*, const std::vector<double>&);
-	bool simulate(READ_INT_TYPE, PairedEndReadQ&, int&);
+	bool simulate(READ_INT_TYPE, PairedEndReadQ&, int&, bool deterministic = false);
 	void finishSimulation();
 
 	//Use it after function 'read' or 'estimateFromReads'
@@ -383,14 +383,16 @@ void PairedEndQModel::startSimulation(simul* sampler, const std::vector<double>&
 	nqpro->startSimulation();
 }
 
-bool PairedEndQModel::simulate(READ_INT_TYPE rid, PairedEndReadQ& read, int& sid) {
+bool PairedEndQModel::simulate(READ_INT_TYPE rid, PairedEndReadQ& read, int& sid, bool deterministic) {
 	int dir, pos;
 	int insertL, mateL1, mateL2;
 	std::string name;
 	std::string qual1, qual2, readseq1, readseq2;
 	std::ostringstream strout;
 
-	sid = sampler->sample(theta_cdf, M + 1);
+	if (!deterministic) {
+    sid = sampler->sample(theta_cdf, M + 1);
+	}
 
 	if (sid == 0) {
 		dir = pos = insertL = 0;
